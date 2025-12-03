@@ -207,10 +207,14 @@ async function main() {
     { key: "contact_phone", value: "0770 25 77 85", type: "tel", label: "Téléphone", group: "contact" },
     { key: "contact_address", value: "Algérie", type: "text", label: "Adresse", group: "contact" },
     { key: "contact_website", value: "www.newin.dz", type: "text", label: "Site Web", group: "contact" },
+    { key: "map_url", value: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3197.086519158798!2d3.0587564!3d36.7525473!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128fb26977ea659f%3A0x4e74f54d98e8ca26!2sAlgiers%2C%20Algeria!5e0!3m2!1sen!2s!4v1635789456789!5m2!1sen!2s", type: "url", label: "Google Maps URL", group: "contact" },
     { key: "social_facebook", value: "https://facebook.com/newin.dz", type: "url", label: "Facebook", group: "social" },
     { key: "social_instagram", value: "https://instagram.com/newin.dz", type: "url", label: "Instagram", group: "social" },
     { key: "social_linkedin", value: "https://linkedin.com/company/newin", type: "url", label: "LinkedIn", group: "social" },
     { key: "social_tiktok", value: "https://tiktok.com/@newin.dz", type: "url", label: "TikTok", group: "social" },
+    { key: "maintenance_enabled", value: "false", type: "text", label: "Mode Maintenance Activé", group: "maintenance" },
+    { key: "maintenance_password", value: "", type: "text", label: "Mot de passe maintenance", group: "maintenance" },
+    { key: "maintenance_message", value: "Notre site est actuellement en maintenance. Nous serons bientôt de retour!", type: "textarea", label: "Message de maintenance", group: "maintenance" },
   ];
 
   for (const setting of settingsData) {

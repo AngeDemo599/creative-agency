@@ -52,13 +52,29 @@ export async function PUT(request: NextRequest) {
 
     // Handle object format
     for (const [key, value] of Object.entries(data)) {
+      // Determine the correct group based on the key prefix
+      let group = "general";
+      if (key.startsWith("maintenance_")) {
+        group = "maintenance";
+      } else if (key.startsWith("contact_") || key === "map_url") {
+        group = "contact";
+      } else if (key.startsWith("social_")) {
+        group = "social";
+      }
+
+      // Try to get existing setting to preserve its group
+      const existingSetting = await prisma.siteSetting.findUnique({
+        where: { key },
+        select: { group: true }
+      });
+
       await prisma.siteSetting.upsert({
         where: { key },
         update: { value: String(value) },
         create: {
           key,
           value: String(value),
-          group: "general",
+          group: existingSetting?.group || group,
         },
       });
     }
