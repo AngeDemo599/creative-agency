@@ -1,0 +1,197 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Admin User for authentication
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  password    String
+  name        String?
+  role        String   @default("viewer") // admin, editor, viewer
+  permissions String   @default("[]") // JSON array of permissions: ["services", "projects", "testimonials", "faqs", "clients", "categories", "settings", "messages", "users"]
+  isActive    Boolean  @default(true)
+  lastLogin   DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Meeting bookings
+model Meeting {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  company     String?
+  service     String?
+  date        DateTime
+  time        String
+  duration    Int      @default(30) // minutes
+  notes       String?
+  status      String   @default("pending") // pending, confirmed, cancelled, completed
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Services offered by the agency
+model Service {
+  id              String   @id @default(cuid())
+  title           String
+  subtitle        String
+  description     String
+  longDescription String
+  image           String
+  features        String   // JSON string: [{title, description}]
+  slug            String   @unique
+  order           Int      @default(0)
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Portfolio projects
+model Project {
+  id          String         @id @default(cuid())
+  title       String
+  description String
+  image       String
+  category    String
+  tags        String         // JSON string: ["tag1", "tag2"]
+  serviceSlug String?        // Link to service
+  featured    Boolean        @default(false)
+  order       Int            @default(0)
+  isActive    Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  media       ProjectMedia[]
+}
+
+// Project media (images and videos)
+model ProjectMedia {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  type      String   // "image" or "video"
+  url       String
+  caption   String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Client testimonials
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  company   String
+  content   String
+  avatar    String?
+  rating    Int      @default(5)
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// FAQ items
+model FAQ {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  category  String
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Client logos
+model Client {
+  id        String   @id @default(cuid())
+  name      String
+  logo      String
+  invert    Boolean  @default(false)
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Site settings (key-value pairs for various settings)
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  type      String   @default("text") // text, json, html, number
+  label     String?
+  group     String   @default("general") // general, contact, social, seo
+  updatedAt DateTime @updatedAt
+}
+
+// Stats for display
+model Stat {
+  id        String   @id @default(cuid())
+  label     String
+  value     Int
+  suffix    String   @default("+")
+  icon      String?
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Categories for Projects and FAQs
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  type      String   // "project" or "faq"
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Contact messages (CRM)
+model Message {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  company     String?
+  subject     String
+  message     String
+  service     String?  // Selected service interest
+  status      String   @default("unread") // unread, read, replied, archived
+  isImportant Boolean  @default(false)
+  isStarred   Boolean  @default(false)
+  notes       String?  // Internal notes
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Team members
+model TeamMember {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  bio       String?
+  image     String
+  linkedin  String?
+  instagram String?
+  twitter   String?
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
