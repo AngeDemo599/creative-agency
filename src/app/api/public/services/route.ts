@@ -10,17 +10,17 @@ export async function GET() {
 
     // Parse features JSON - ensure proper parsing
     const servicesWithFeatures = services.map(s => {
-      let features = s.features;
-      if (typeof features === 'string') {
+      let parsedFeatures: string[] = [];
+      if (typeof s.features === 'string' && s.features) {
         try {
-          features = JSON.parse(features);
+          parsedFeatures = JSON.parse(s.features);
         } catch {
-          features = [];
+          parsedFeatures = [];
         }
       }
       return {
         ...s,
-        features: features || []
+        features: parsedFeatures
       };
     });
 
