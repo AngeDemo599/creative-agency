@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
-import path from "path";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB for videos
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB for images
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB for images (Cloudinary handles optimization)
 const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const ALLOWED_VIDEO_TYPES = ["video/mp4", "video/webm", "video/quicktime"];
 
@@ -32,39 +31,32 @@ export async function POST(request: NextRequest) {
     const maxSize = isImage ? MAX_IMAGE_SIZE : MAX_FILE_SIZE;
     if (file.size > maxSize) {
       return NextResponse.json(
-        { error: `File size exceeds ${isImage ? "5MB" : "50MB"} limit` },
+        { error: `File size exceeds ${isImage ? "10MB" : "50MB"} limit` },
         { status: 400 }
       );
     }
-
-    // Generate unique filename
-    const timestamp = Date.now();
-    const randomString = Math.random().toString(36).substring(2, 8);
-    const extension = file.name.split(".").pop()?.toLowerCase() || "jpg";
-    const filename = `${timestamp}-${randomString}.${extension}`;
 
     // Convert file to buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Save file to public/uploads folder
-    const uploadDir = path.join(process.cwd(), "public", "uploads", folder);
-    const filePath = path.join(uploadDir, filename);
+    // Upload to Cloudinary
+    const result = await uploadToCloudinary(
+      buffer,
+      folder,
+      isVideo ? "video" : "image"
+    );
 
-    // Ensure directory exists
-    const { mkdir } = await import("fs/promises");
-    await mkdir(uploadDir, { recursive: true });
-
-    await writeFile(filePath, buffer);
-
-    // Return the public URL
-    const publicUrl = `/uploads/${folder}/${filename}`;
-
-    return NextResponse.json({ url: publicUrl, filename });
+    return NextResponse.json({
+      url: result.url,
+      publicId: result.publicId,
+      width: result.width,
+      height: result.height,
+    });
   } catch (error) {
     console.error("Upload error:", error);
     return NextResponse.json(
-      { error: "Failed to upload file" },
+      { error: "Failed to upload file. Please check Cloudinary configuration." },
       { status: 500 }
     );
   }

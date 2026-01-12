@@ -1,62 +1,30 @@
 "use client";
 
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import CTASection from "@/components/CTASection";
 
-const serviceData = {
-  title: "Market Research",
-  subtitle: "Études de Marché",
-  description: "Nous analysons les tendances du marché et le comportement des consommateurs pour éclairer vos décisions stratégiques. Des insights précieux pour un positionnement optimal de votre marque.",
-  longDescription: "Une bonne stratégie commence par une compréhension approfondie de votre marché. Notre équipe d'analystes réalise des études complètes qui combinent données quantitatives et qualitatives. Nous identifions les opportunités, analysons la concurrence et décryptons les attentes de vos consommateurs pour vous fournir des recommandations actionnables.",
-  features: [
-    { title: "Competitive Analysis", description: "Analyse approfondie de vos concurrents" },
-    { title: "Consumer Insights", description: "Compréhension des besoins clients" },
-    { title: "Market Trends", description: "Identification des tendances émergentes" },
-    { title: "Data Analytics", description: "Analyse de données et reporting" },
-  ],
-  image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop",
-};
+interface Service {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  longDescription: string;
+  features: { title: string; description: string }[];
+  image: string;
+  slug: string;
+}
 
-const relatedProjects = [
-  {
-    id: 1,
-    title: "Retail Market Study",
-    description: "Étude de marché pour chaîne de distribution",
-    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop",
-    tags: ["Retail", "Consumer", "Analysis"],
-  },
-  {
-    id: 2,
-    title: "Tech Industry Report",
-    description: "Rapport sectoriel sur l'industrie technologique",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
-    tags: ["Tech", "B2B", "Report"],
-  },
-  {
-    id: 3,
-    title: "Consumer Behavior Study",
-    description: "Étude comportementale pour marque FMCG",
-    image: "https://images.unsplash.com/photo-1553028826-f4804a6dba3b?w=800&h=600&fit=crop",
-    tags: ["Consumer", "FMCG", "Insights"],
-  },
-  {
-    id: 4,
-    title: "Brand Positioning",
-    description: "Étude de positionnement pour nouvelle marque",
-    image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=600&fit=crop",
-    tags: ["Positioning", "Strategy", "Brand"],
-  },
-  {
-    id: 5,
-    title: "Market Entry Analysis",
-    description: "Analyse d'opportunité pour entrée sur nouveau marché",
-    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop",
-    tags: ["Market Entry", "Strategy", "Global"],
-  },
-];
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  tags: string[];
+}
 
-function ProjectCard({ project }: { project: typeof relatedProjects[0] }) {
+function ProjectCard({ project }: { project: Project }) {
   return (
     <div className="flex-shrink-0 w-[350px] group cursor-pointer">
       <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-4">
@@ -88,8 +56,40 @@ function ProjectCard({ project }: { project: typeof relatedProjects[0] }) {
   );
 }
 
-export default function MarketResearchServicePage() {
+export default function ServicePage() {
+  const params = useParams();
+  const slug = params.slug as string;
   const carouselRef = useRef<HTMLDivElement>(null);
+  const [service, setService] = useState<Service | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [servicesRes, projectsRes] = await Promise.all([
+          fetch("/api/public/services"),
+          fetch(`/api/public/projects?serviceSlug=${slug}`)
+        ]);
+
+        const services = await servicesRes.json();
+        const projectsData = await projectsRes.json();
+
+        const foundService = services.find((s: Service) => s.slug === slug);
+        if (foundService) {
+          setService(foundService);
+        }
+        setProjects(Array.isArray(projectsData) ? projectsData : []);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    if (slug) {
+      fetchData();
+    }
+  }, [slug]);
 
   const scroll = (direction: "left" | "right") => {
     if (carouselRef.current) {
@@ -100,6 +100,25 @@ export default function MarketResearchServicePage() {
       });
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#F7F3F1] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
+      </div>
+    );
+  }
+
+  if (!service) {
+    return (
+      <div className="min-h-screen bg-[#F7F3F1] flex flex-col items-center justify-center gap-4">
+        <p className="text-zinc-600 text-xl">Service non trouvé</p>
+        <Link href="/services" className="text-pink-600 hover:underline">
+          Retour aux services
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F7F3F1]">
@@ -116,20 +135,20 @@ export default function MarketResearchServicePage() {
               Services
             </Link>
             <span>/</span>
-            <span className="text-zinc-700">Market Research</span>
+            <span className="text-zinc-700">{service.title}</span>
           </div>
 
           {/* Header */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <span className="text-pink-600 text-sm font-semibold uppercase tracking-wider">
-                {serviceData.subtitle}
+                {service.subtitle}
               </span>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-neutral-900 mt-3 mb-6">
-                {serviceData.title}
+                {service.title}
               </h1>
               <p className="text-zinc-600 text-lg mb-8">
-                {serviceData.description}
+                {service.description}
               </p>
               <Link
                 href="/contact"
@@ -144,8 +163,8 @@ export default function MarketResearchServicePage() {
             <div className="relative">
               <div className="aspect-[4/3] rounded-3xl overflow-hidden">
                 <img
-                  src={serviceData.image}
-                  alt={serviceData.title}
+                  src={service.image}
+                  alt={service.title}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -169,7 +188,7 @@ export default function MarketResearchServicePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {serviceData.features.map((feature, index) => (
+            {service.features.map((feature, index) => (
               <div
                 key={index}
                 className="p-6 rounded-2xl bg-[#F7F3F1] hover:bg-pink-600 group transition-colors duration-300"
@@ -191,73 +210,75 @@ export default function MarketResearchServicePage() {
 
           <div className="mt-12 p-8 rounded-3xl bg-[#F7F3F1]">
             <p className="text-zinc-600 text-lg leading-relaxed">
-              {serviceData.longDescription}
+              {service.longDescription}
             </p>
           </div>
         </div>
       </section>
 
       {/* Projects Carousel Section */}
-      <section className="py-20 px-6 bg-neutral-900 relative overflow-hidden">
-        <div className="absolute -left-40 top-0 w-[400px] h-[400px] bg-pink-600/10 rounded-full blur-[120px]" />
-        <div className="absolute -right-40 bottom-0 w-[400px] h-[400px] bg-pink-600/10 rounded-full blur-[120px]" />
+      {projects.length > 0 && (
+        <section className="py-20 px-6 bg-neutral-900 relative overflow-hidden">
+          <div className="absolute -left-40 top-0 w-[400px] h-[400px] bg-pink-600/10 rounded-full blur-[120px]" />
+          <div className="absolute -right-40 bottom-0 w-[400px] h-[400px] bg-pink-600/10 rounded-full blur-[120px]" />
 
-        <div className="max-w-7xl mx-auto relative z-10">
-          {/* Header */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
-            <div>
-              <span className="text-pink-500 text-sm font-semibold uppercase tracking-wider">
-                Portfolio
-              </span>
-              <h2 className="text-3xl md:text-4xl font-extrabold text-white mt-2">
-                Projets Research
-              </h2>
+          <div className="max-w-7xl mx-auto relative z-10">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+              <div>
+                <span className="text-pink-500 text-sm font-semibold uppercase tracking-wider">
+                  Portfolio
+                </span>
+                <h2 className="text-3xl md:text-4xl font-extrabold text-white mt-2">
+                  Projets {service.title}
+                </h2>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => scroll("left")}
+                  className="w-12 h-12 rounded-full border border-zinc-700 flex items-center justify-center text-white hover:bg-pink-600 hover:border-pink-600 transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => scroll("right")}
+                  className="w-12 h-12 rounded-full border border-zinc-700 flex items-center justify-center text-white hover:bg-pink-600 hover:border-pink-600 transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
             </div>
-            <div className="flex gap-3">
-              <button
-                onClick={() => scroll("left")}
-                className="w-12 h-12 rounded-full border border-zinc-700 flex items-center justify-center text-white hover:bg-pink-600 hover:border-pink-600 transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-              <button
-                onClick={() => scroll("right")}
-                className="w-12 h-12 rounded-full border border-zinc-700 flex items-center justify-center text-white hover:bg-pink-600 hover:border-pink-600 transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-          </div>
 
-          {/* Carousel */}
-          <div
-            ref={carouselRef}
-            className="flex gap-6 overflow-x-auto scrollbar-hide pb-4"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {relatedProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
-          </div>
-
-          {/* CTA */}
-          <div className="mt-12 text-center">
-            <Link
-              href="/projects"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-pink-600 text-white rounded-full font-semibold hover:bg-pink-700 transition-colors"
+            {/* Carousel */}
+            <div
+              ref={carouselRef}
+              className="flex gap-6 overflow-x-auto scrollbar-hide pb-4"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
-              Voir tous les projets Research
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
+              {projects.map((project) => (
+                <ProjectCard key={project.id} project={project} />
+              ))}
+            </div>
+
+            {/* CTA */}
+            <div className="mt-12 text-center">
+              <Link
+                href="/projects"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-pink-600 text-white rounded-full font-semibold hover:bg-pink-700 transition-colors"
+              >
+                Voir tous les projets
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* CTA Section */}
       <CTASection />

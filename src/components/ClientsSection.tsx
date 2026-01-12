@@ -78,7 +78,7 @@ export default function ClientsSection() {
                 <img
                   src={client.logo}
                   alt={client.name}
-                  className="h-8 md:h-10 w-auto max-w-[120px] object-contain opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
+                  className="h-14 md:h-20 w-auto max-w-[180px] object-contain opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
                 />
               </div>
             ))

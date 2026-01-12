@@ -63,7 +63,7 @@ export default function TeamPage() {
     formData.append("file", file);
 
     try {
-      const res = await fetch("/api/upload", {
+      const res = await fetch("/api/admin/upload", {
         method: "POST",
         body: formData,
       });
@@ -230,7 +230,15 @@ export default function TeamPage() {
             className={`bg-zinc-950 border rounded-2xl overflow-hidden group ${selectedIds.has(member.id) ? 'border-pink-500' : 'border-zinc-800'}`}
           >
             <div className="relative h-48">
-              <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+              {member.image ? (
+                <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-zinc-800 flex items-center justify-center">
+                  <svg className="w-16 h-16 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </div>
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
               <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
                 <input

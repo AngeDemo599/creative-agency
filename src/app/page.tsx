@@ -114,17 +114,28 @@ export default function Home() {
                 {/* Heading */}
                 <div className="flex flex-col gap-1">
                   <h2 className="text-white text-4xl md:text-5xl font-extrabold uppercase leading-[1.1]">
-                    Notre Équipe
+                    NEWIN AGENCY™
                   </h2>
                   <span className="text-pink-600 text-xl md:text-2xl font-light">
-                    Les Newiners
+                    Agence Créative & Digitale
                   </span>
                 </div>
 
                 {/* Description */}
-                <p className="text-white text-base md:text-lg font-normal leading-7 max-w-[500px]">
-                  Nous sommes une équipe de talentueux graphistes et experts en communication digitale qui partage une passion commune pour l&apos;esthétique et l&apos;innovation.
-                </p>
+                <div className="flex flex-col gap-4 max-w-[550px]">
+                  <p className="text-white text-base md:text-lg font-normal leading-7">
+                    <span className="text-pink-500 font-semibold">NEWIN AGENCY™</span> est une agence de communication créative & digitale basée à <span className="text-pink-400">Bir Khadem</span>.
+                  </p>
+                  <p className="text-white/90 text-sm md:text-base font-normal leading-7">
+                    Notre équipe de talentueux graphistes & experts en communication digitale partage une passion commune pour l&apos;esthétique & l&apos;innovation.
+                  </p>
+                  <p className="text-white/80 text-sm md:text-base font-normal leading-7">
+                    Notre expertise s&apos;étend à tous les domaines du graphisme, de la conception de logos et d&apos;identités visuelles percutantes à la réalisation de supports de communication imprimés et numériques.
+                  </p>
+                  <p className="text-white/70 text-sm md:text-base font-normal leading-7">
+                    Nous sommes également spécialisés dans la création de stratégies digitales percutantes pour propulser votre marque, en intégrant les réseaux sociaux et les campagnes publicitaires.
+                  </p>
+                </div>
 
                 {/* Button */}
                 <a
