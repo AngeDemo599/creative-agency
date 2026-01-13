@@ -24,7 +24,11 @@ export async function GET() {
       };
     });
 
-    return NextResponse.json(servicesWithFeatures);
+    return NextResponse.json(servicesWithFeatures, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
+    });
   } catch (error) {
     console.error("Error fetching services:", error);
     return NextResponse.json({ error: "Failed to fetch services" }, { status: 500 });

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface Client {
@@ -29,9 +30,11 @@ export default function ClientsSection() {
       <div className="absolute -right-40 bottom-0 w-[600px] h-[600px] bg-pink-600/5 rounded-full blur-[150px]" />
 
       {/* Background W Logo */}
-      <img
+      <Image
         src="/newin_w.png"
         alt=""
+        width={600}
+        height={600}
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] md:w-[600px] opacity-[0.03] pointer-events-none"
       />
 
@@ -74,11 +77,13 @@ export default function ClientsSection() {
             </div>
           ) : clients.length > 0 ? (
             clients.map((client) => (
-              <div key={client.id} className="group cursor-pointer">
-                <img
+              <div key={client.id} className="group cursor-pointer relative h-14 md:h-20 w-[140px] md:w-[180px]">
+                <Image
                   src={client.logo}
                   alt={client.name}
-                  className="h-14 md:h-20 w-auto max-w-[180px] object-contain opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
+                  fill
+                  sizes="180px"
+                  className="object-contain opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
                 />
               </div>
             ))

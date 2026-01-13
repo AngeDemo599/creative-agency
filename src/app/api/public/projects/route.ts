@@ -22,7 +22,11 @@ export async function GET(request: NextRequest) {
       tags: typeof p.tags === 'string' ? JSON.parse(p.tags) : p.tags
     }));
 
-    return NextResponse.json(projectsWithTags);
+    return NextResponse.json(projectsWithTags, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
+    });
   } catch (error) {
     console.error("Error fetching projects:", error);
     return NextResponse.json({ error: "Failed to fetch projects" }, { status: 500 });

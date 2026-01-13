@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 
 interface Project {
@@ -29,10 +30,12 @@ function MarqueeRow({ projects, speed, reverse = false }: { projects: Project[];
             href={`/projects/${project.id}`}
             className="group relative flex-shrink-0 w-[300px] md:w-[400px] h-[200px] md:h-[250px] rounded-2xl overflow-hidden"
           >
-            <img
+            <Image
               src={project.image || "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=800&h=500&fit=crop"}
               alt={project.title}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              fill
+              sizes="(max-width: 768px) 300px, 400px"
+              className="object-cover transition-transform duration-700 group-hover:scale-110"
             />
             {/* Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-300" />

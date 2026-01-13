@@ -8,7 +8,11 @@ export async function GET() {
       orderBy: { order: 'asc' }
     });
 
-    return NextResponse.json(faqs);
+    return NextResponse.json(faqs, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
+    });
   } catch (error) {
     console.error("Error fetching FAQs:", error);
     return NextResponse.json({ error: "Failed to fetch FAQs" }, { status: 500 });

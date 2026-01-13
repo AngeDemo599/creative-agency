@@ -11,7 +11,11 @@ export async function GET() {
       settingsObj[s.key] = s.value;
     });
 
-    return NextResponse.json(settingsObj);
+    return NextResponse.json(settingsObj, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
+    });
   } catch (error) {
     console.error("Error fetching settings:", error);
     return NextResponse.json({ error: "Failed to fetch settings" }, { status: 500 });
