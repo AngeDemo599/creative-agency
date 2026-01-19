@@ -234,7 +234,7 @@ export default function ContactPageClient() {
   return (
     <div className="min-h-screen bg-[#F7F3F1]">
       {/* Hero Section */}
-      <section className="pt-12 pb-16 px-6">
+      <section className="pt-8 sm:pt-12 pb-10 sm:pb-16 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm text-zinc-500 mb-8">
@@ -261,12 +261,12 @@ export default function ContactPageClient() {
       </section>
 
       {/* Contact Section */}
-      <section className="pb-24 px-6">
+      <section className="pb-16 sm:pb-24 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-12">
             {/* Contact Info */}
             <div className="lg:col-span-1">
-              <div className="bg-neutral-900 rounded-[32px] p-8 md:p-10">
+              <div className="bg-neutral-900 rounded-[24px] sm:rounded-[32px] p-6 sm:p-8 md:p-10">
                 <h2 className="text-2xl font-bold text-white mb-8">
                   Informations de contact
                 </h2>
@@ -319,37 +319,39 @@ export default function ContactPageClient() {
 
             {/* Contact Form / Meeting Booking */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-[32px] p-8 md:p-10">
+              <div className="bg-white rounded-[24px] sm:rounded-[32px] p-5 sm:p-8 md:p-10">
                 {/* Tabs */}
-                <div className="flex gap-2 mb-8">
+                <div className="flex flex-col sm:flex-row gap-2 mb-8">
                   <button
                     onClick={() => setMeetingTab("message")}
-                    className={`flex-1 py-3 px-6 rounded-full font-semibold transition-all ${
+                    className={`flex-1 py-3 px-4 sm:px-6 rounded-2xl sm:rounded-full font-semibold transition-all text-sm sm:text-base ${
                       meetingTab === "message"
                         ? "bg-pink-600 text-white"
                         : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"
                     }`}
                   >
                     <span className="flex items-center justify-center gap-2">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
-                      Envoyer un message
+                      <span className="hidden sm:inline">Envoyer un message</span>
+                      <span className="sm:hidden">Message</span>
                     </span>
                   </button>
                   <button
                     onClick={() => setMeetingTab("meeting")}
-                    className={`flex-1 py-3 px-6 rounded-full font-semibold transition-all ${
+                    className={`flex-1 py-3 px-4 sm:px-6 rounded-2xl sm:rounded-full font-semibold transition-all text-sm sm:text-base ${
                       meetingTab === "meeting"
                         ? "bg-pink-600 text-white"
                         : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"
                     }`}
                   >
                     <span className="flex items-center justify-center gap-2">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      Réserver un rendez-vous
+                      <span className="hidden sm:inline">Réserver un rendez-vous</span>
+                      <span className="sm:hidden">Rendez-vous</span>
                     </span>
                   </button>
                 </div>
@@ -626,9 +628,9 @@ export default function ContactPageClient() {
       </section>
 
       {/* Map Section */}
-      <section className="pb-24 px-6">
+      <section className="pb-16 sm:pb-24 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-neutral-900 rounded-[32px] p-4 h-[400px] overflow-hidden">
+          <div className="bg-neutral-900 rounded-[24px] sm:rounded-[32px] p-3 sm:p-4 h-[300px] sm:h-[400px] overflow-hidden">
             <iframe
               src={settings.map_url || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3197.086519158798!2d3.0587564!3d36.7525473!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128fb26977ea659f%3A0x4e74f54d98e8ca26!2sAlgiers%2C%20Algeria!5e0!3m2!1sen!2s!4v1635789456789!5m2!1sen!2s"}
               width="100%"
