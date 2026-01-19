@@ -22,7 +22,7 @@ function ArrowIcon({ className = "" }: { className?: string }) {
 
 function ServiceCard({ service }: { service: Service }) {
   return (
-    <div className="w-full md:w-[calc(33.333%-12px)] lg:w-[calc(33.333%-12px)] xl:w-[calc(25%-12px)] 2xl:w-[calc(25%-12px)] h-96 relative bg-zinc-900 hover:bg-pink-800 rounded-[32px] overflow-hidden group cursor-pointer transition-all duration-500">
+    <div className="w-full sm:w-[calc(50%-8px)] lg:w-[calc(33.333%-12px)] xl:w-[calc(25%-12px)] h-80 sm:h-96 relative bg-zinc-900 hover:bg-pink-800 rounded-[24px] sm:rounded-[32px] overflow-hidden group cursor-pointer transition-all duration-500">
       {/* Title */}
       <div className="absolute top-6 left-6 right-6">
         <h3 className="text-pink-500 group-hover:text-white text-2xl md:text-3xl font-bold leading-tight whitespace-pre-line transition-colors duration-300">
