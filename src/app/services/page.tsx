@@ -75,7 +75,7 @@ function ServiceCardLight({ service }: { service: Service }) {
     <Link href={`/services/${service.slug}`} className="w-full md:w-[calc(33.333%-12px)] lg:w-[calc(33.333%-12px)] xl:w-[calc(25%-12px)] h-[420px] relative bg-[#F7F3F1] hover:bg-pink-800 rounded-[32px] overflow-hidden group cursor-pointer transition-all duration-500 border border-zinc-200 hover:border-pink-800 block">
       {/* Title */}
       <div className="absolute top-6 left-6 right-6">
-        <h3 className="text-pink-600 group-hover:text-white text-2xl md:text-3xl font-bold leading-tight whitespace-pre-line transition-colors duration-300">
+        <h3 className="text-pink-600 group-hover:text-white text-base font-semibold leading-tight whitespace-pre-line transition-colors duration-300">
           {service.title}
         </h3>
       </div>
@@ -217,33 +217,6 @@ export default function ServicesPage() {
 
   return (
     <div className="min-h-screen bg-[#F7F3F1]">
-      {/* Hero Section */}
-      <section className="pt-12 pb-8 px-6">
-        <div className="max-w-7xl mx-auto">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-zinc-500 mb-8">
-            <Link href="/" className="hover:text-pink-600 transition-colors">
-              Accueil
-            </Link>
-            <span>/</span>
-            <span className="text-zinc-700">Nos Services</span>
-          </div>
-
-          {/* Header */}
-          <div className="text-center max-w-3xl mx-auto">
-            <span className="text-pink-600 text-sm font-semibold uppercase tracking-wider">
-              Nos Services
-            </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-neutral-900 mt-3 mb-6">
-              Ce que nous faisons
-            </h1>
-            <p className="text-zinc-600 text-lg">
-              Des solutions créatives complètes pour transformer votre vision en réalité et propulser votre marque vers de nouveaux sommets.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* Services Section - Light Theme */}
       <section className="px-5 py-6">
         <div className="relative bg-white rounded-[48px] px-6 md:px-12 lg:px-24 py-12 md:py-20 overflow-hidden border border-zinc-200">

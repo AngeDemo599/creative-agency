@@ -33,66 +33,6 @@ function getVimeoId(url: string): string | null {
   return match ? match[1] : null;
 }
 
-function MediaItem({ item, onClick }: { item: ProjectMedia; onClick: () => void }) {
-  const youtubeId = item.type === "video" ? getYouTubeId(item.url) : null;
-  const vimeoId = item.type === "video" ? getVimeoId(item.url) : null;
-
-  return (
-    <div
-      className="group relative aspect-video rounded-2xl overflow-hidden cursor-pointer bg-zinc-200"
-      onClick={onClick}
-    >
-      {item.type === "image" ? (
-        <Image
-          src={item.url}
-          alt={item.caption || ""}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-      ) : youtubeId ? (
-        <Image
-          src={`https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`}
-          alt={item.caption || "Video thumbnail"}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-      ) : vimeoId ? (
-        <div className="w-full h-full bg-zinc-800 flex items-center justify-center">
-          <svg className="w-16 h-16 text-white/50" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M8 5v14l11-7z" />
-          </svg>
-        </div>
-      ) : (
-        <video
-          src={item.url}
-          className="w-full h-full object-cover"
-          muted
-        />
-      )}
-
-      {/* Play button overlay for videos */}
-      {item.type === "video" && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
-            <svg className="w-8 h-8 text-pink-600 ml-1" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z" />
-            </svg>
-          </div>
-        </div>
-      )}
-
-      {/* Caption overlay */}
-      {item.caption && (
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-          <p className="text-white text-sm">{item.caption}</p>
-        </div>
-      )}
-    </div>
-  );
-}
-
 function MediaModal({
   item,
   onClose,
@@ -157,10 +97,10 @@ function MediaModal({
       )}
 
       {/* Media content */}
-      <div className="max-w-5xl max-h-[85vh] w-full mx-6" onClick={(e) => e.stopPropagation()}>
+      <div className="max-w-6xl max-h-[90vh] w-full mx-6" onClick={(e) => e.stopPropagation()}>
         {item.type === "image" ? (
-          <div className="relative w-full h-[85vh]">
-            <Image src={item.url} alt={item.caption || ""} fill className="object-contain rounded-lg" sizes="100vw" />
+          <div className="relative w-full h-[90vh]">
+            <Image src={item.url} alt={item.caption || ""} fill className="object-contain" sizes="100vw" />
           </div>
         ) : youtubeId ? (
           <div className="aspect-video">
@@ -181,7 +121,7 @@ function MediaModal({
             />
           </div>
         ) : (
-          <video src={item.url} controls autoPlay className="w-full max-h-[85vh] rounded-lg" />
+          <video src={item.url} controls autoPlay className="w-full max-h-[90vh] rounded-lg" />
         )}
 
         {item.caption && (
@@ -235,10 +175,24 @@ export default function ProjectDetailClient({ projectId }: { projectId: string }
   ];
 
   return (
-    <div className="min-h-screen bg-[#F7F3F1]">
-      {/* Hero Section */}
-      <section className="pt-12 pb-8 px-6">
-        <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-white">
+      {/* Hero Cover Image - Full Width */}
+      <section className="relative w-full">
+        <div
+          className="w-full cursor-pointer"
+          onClick={() => setSelectedMediaIndex(0)}
+        >
+          <img
+            src={project.image}
+            alt={project.title}
+            className="w-full h-auto max-h-[80vh] object-contain bg-zinc-100"
+          />
+        </div>
+      </section>
+
+      {/* Case Study Header */}
+      <section className="py-16 px-6 bg-[#F7F3F1]">
+        <div className="max-w-4xl mx-auto">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm text-zinc-500 mb-8">
             <Link href="/" className="hover:text-pink-600 transition-colors">
@@ -252,85 +206,119 @@ export default function ProjectDetailClient({ projectId }: { projectId: string }
             <span className="text-zinc-700">{project.title}</span>
           </div>
 
-          {/* Back button */}
+          {/* Title & Category */}
+          <div className="mb-8">
+            <span className="inline-block px-4 py-2 bg-pink-600 text-white rounded-full text-sm font-semibold mb-6">
+              {project.category}
+            </span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-neutral-900 leading-tight">
+              {project.title}
+            </h1>
+          </div>
+
+          {/* Tags */}
+          {project.tags && project.tags.length > 0 && (
+            <div className="flex flex-wrap gap-3 mb-8">
+              {project.tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="px-4 py-2 bg-white text-zinc-700 rounded-full text-sm font-medium shadow-sm"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Description */}
+          <div className="prose prose-lg max-w-none">
+            <p className="text-zinc-600 text-xl leading-relaxed">
+              {project.description}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Media Gallery - Case Study Style */}
+      {project.media.length > 0 && (
+        <section className="py-16 bg-white">
+          <div className="max-w-6xl mx-auto px-6">
+            <h2 className="text-2xl font-bold text-neutral-900 mb-8 text-center">
+              Galerie du projet
+            </h2>
+
+            {/* Full-width images stacked */}
+            <div className="space-y-8">
+              {project.media.map((item, index) => (
+                <div
+                  key={item.id}
+                  className="group cursor-pointer"
+                  onClick={() => setSelectedMediaIndex(index + 1)}
+                >
+                  {item.type === "image" ? (
+                    <div className="relative bg-zinc-100 rounded-2xl overflow-hidden">
+                      <img
+                        src={item.url}
+                        alt={item.caption || `Image ${index + 1}`}
+                        className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-[1.01]"
+                      />
+                      {/* Hover overlay */}
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
+                        <div className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
+                          <svg className="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="relative aspect-video bg-zinc-900 rounded-2xl overflow-hidden">
+                      {getYouTubeId(item.url) ? (
+                        <Image
+                          src={`https://img.youtube.com/vi/${getYouTubeId(item.url)}/maxresdefault.jpg`}
+                          alt={item.caption || "Video thumbnail"}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <video src={item.url} className="w-full h-full object-cover" muted />
+                      )}
+                      {/* Play button */}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-20 h-20 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+                          <svg className="w-10 h-10 text-pink-600 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Caption */}
+                  {item.caption && (
+                    <p className="text-center text-zinc-500 text-sm mt-4 italic">
+                      {item.caption}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Back to Projects */}
+      <section className="py-12 px-6 bg-[#F7F3F1]">
+        <div className="max-w-4xl mx-auto text-center">
           <Link
             href="/projects"
-            className="inline-flex items-center gap-2 text-zinc-600 hover:text-pink-600 transition-colors mb-8"
+            className="inline-flex items-center gap-3 px-8 py-4 bg-pink-600 text-white font-semibold rounded-full hover:bg-pink-700 transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Retour aux projets
+            Voir tous les projets
           </Link>
-        </div>
-      </section>
-
-      {/* Main Content */}
-      <section className="pb-16 px-6">
-        <div className="max-w-7xl mx-auto">
-          {/* Cover Image */}
-          <div
-            className="relative aspect-[21/9] rounded-3xl overflow-hidden mb-8 cursor-pointer"
-            onClick={() => setSelectedMediaIndex(0)}
-          >
-            <Image
-              src={project.image}
-              alt={project.title}
-              fill
-              sizes="100vw"
-              className="object-cover hover:scale-105 transition-transform duration-500"
-              priority
-            />
-          </div>
-
-          {/* Project Info */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-16">
-            <div className="lg:col-span-2">
-              <span className="inline-block px-4 py-1.5 bg-pink-100 text-pink-600 rounded-full text-sm font-medium mb-4">
-                {project.category}
-              </span>
-              <h1 className="text-4xl md:text-5xl font-extrabold text-neutral-900 mb-6">
-                {project.title}
-              </h1>
-              <p className="text-zinc-600 text-lg leading-relaxed">
-                {project.description}
-              </p>
-            </div>
-
-            <div className="lg:col-span-1">
-              <div className="bg-white rounded-2xl p-6">
-                <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-4">
-                  Tags
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="px-4 py-2 bg-zinc-100 text-zinc-700 rounded-full text-sm"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Media Gallery */}
-          {project.media.length > 0 && (
-            <div>
-              <h2 className="text-2xl font-bold text-neutral-900 mb-6">Galerie</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {project.media.map((item, index) => (
-                  <MediaItem
-                    key={item.id}
-                    item={item}
-                    onClick={() => setSelectedMediaIndex(index + 1)}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </section>
 

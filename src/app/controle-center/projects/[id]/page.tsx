@@ -70,18 +70,19 @@ export default function ProjectDetailPage() {
     setUploading(true);
 
     for (const file of Array.from(files)) {
-      // Check file size (5MB max)
-      if (file.size > 5 * 1024 * 1024) {
-        setUploadError(`${file.name}: File size must be less than 5MB`);
-        continue;
-      }
-
-      // Check file type
+      // Check file type first
       const isImage = ["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type);
       const isVideo = ["video/mp4", "video/webm", "video/quicktime"].includes(file.type);
 
       if (!isImage && !isVideo) {
-        setUploadError(`${file.name}: Invalid file type`);
+        setUploadError(`${file.name}: Invalid file type. Allowed: JPEG, PNG, WebP, GIF, MP4, WebM`);
+        continue;
+      }
+
+      // Check file size (10MB for images, 50MB for videos)
+      const maxSize = isImage ? 10 * 1024 * 1024 : 50 * 1024 * 1024;
+      if (file.size > maxSize) {
+        setUploadError(`${file.name}: File size must be less than ${isImage ? "10MB" : "50MB"}`);
         continue;
       }
 

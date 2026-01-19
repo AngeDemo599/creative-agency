@@ -29,7 +29,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="text-lg font-semibold text-neutral-900 pr-8">{question}</span>
-        <div className={`w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center flex-shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180 bg-pink-600" : ""}`}>
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 ${isOpen ? "rotate-180 bg-pink-600" : "bg-pink-100"}`}>
           <svg className={`w-4 h-4 ${isOpen ? "text-white" : "text-pink-600"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
@@ -42,51 +42,34 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   );
 }
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
+function ProjectCard({ project }: { project: Project }) {
   return (
     <Link
       href={`/projects/${project.id}`}
-      className="group cursor-pointer block"
-      style={{ animationDelay: `${index * 100}ms` }}
+      className="group cursor-pointer block mb-6 break-inside-avoid"
     >
-      {/* Image Container */}
-      <div className="relative aspect-[4/3] rounded-3xl overflow-hidden mb-4 shadow-lg shadow-black/5">
+      <div className="relative overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-xl transition-shadow duration-300">
         <img
           src={project.image}
           alt={project.title}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          className="w-full h-auto block transition-all duration-500 group-hover:scale-[1.02]"
         />
-        {/* Overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6">
-          <p className="text-white/80 text-sm mb-3 line-clamp-2">{project.description}</p>
-          <div className="flex flex-wrap gap-2">
-            {project.tags?.slice(0, 3).map((tag, idx) => (
-              <span
-                key={idx}
-                className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-xs"
-              >
-                {tag}
-              </span>
-            ))}
+        {/* Overlay - appears on hover */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
+          {/* Bottom info */}
+          <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+            <h3 className="text-white font-bold text-xl mb-2">{project.title}</h3>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="px-3 py-1 bg-pink-600 text-white text-xs font-medium rounded-full">{project.category}</span>
+              {project.tags?.slice(0, 2).map((tag, idx) => (
+                <span key={idx} className="px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-xs rounded-full">
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
-        {/* Category Badge */}
-        <div className="absolute top-4 left-4">
-          <span className="px-4 py-2 bg-white/95 backdrop-blur-sm rounded-full text-neutral-900 text-xs font-semibold shadow-lg">
-            {project.category}
-          </span>
-        </div>
-        {/* Arrow Button */}
-        <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:bg-pink-600 group-hover:rotate-45">
-          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-        </div>
       </div>
-      {/* Content */}
-      <h3 className="text-xl font-bold text-neutral-900 group-hover:text-pink-600 transition-colors">
-        {project.title}
-      </h3>
     </Link>
   );
 }
@@ -119,46 +102,18 @@ export default function ProjectsPage() {
 
   return (
     <div className="min-h-screen bg-[#F7F3F1]">
-      {/* Hero Section */}
-      <section className="pt-32 pb-16 px-6">
-        <div className="max-w-7xl mx-auto">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-zinc-500 mb-6">
-            <Link href="/" className="hover:text-pink-600 transition-colors">
-              Accueil
-            </Link>
-            <span>/</span>
-            <span className="text-zinc-900">Projets</span>
-          </div>
-
-          {/* Header */}
-          <div className="text-center max-w-3xl mx-auto">
-            <span className="text-pink-600 text-sm font-semibold uppercase tracking-wider">
-              Portfolio
-            </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-neutral-900 mt-3 mb-6">
-              Nos Projets
-            </h1>
-            <p className="text-lg text-zinc-600 leading-relaxed">
-              Découvrez une sélection de nos réalisations les plus marquantes,
-              créées avec passion et innovation pour des marques ambitieuses.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* Filter Section */}
-      <section className="py-8 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-wrap justify-center gap-3">
+      <section className="pt-8 pb-6 px-4 md:px-6">
+        <div className="max-w-[1800px] mx-auto">
+          <div className="flex flex-wrap justify-center gap-2">
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => setActiveCategory(category)}
-                className={`px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 ${
+                className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
                   activeCategory === category
                     ? "bg-pink-600 text-white shadow-lg shadow-pink-600/25"
-                    : "bg-white text-zinc-700 hover:bg-pink-100 hover:text-pink-600 shadow-sm"
+                    : "bg-white text-zinc-600 hover:bg-pink-50 hover:text-pink-600 shadow-sm"
                 }`}
               >
                 {category}
@@ -168,17 +123,17 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      {/* Projects Grid */}
-      <section className="py-16 px-6">
-        <div className="max-w-7xl mx-auto">
+      {/* Projects Masonry Grid */}
+      <section className="py-6 px-4 md:px-6">
+        <div className="max-w-[1800px] mx-auto">
           {loading ? (
             <div className="flex justify-center py-16">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-pink-600"></div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredProjects.map((project, index) => (
-                <ProjectCard key={project.id} project={project} index={index} />
+            <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6">
+              {filteredProjects.map((project) => (
+                <ProjectCard key={project.id} project={project} />
               ))}
             </div>
           )}
@@ -186,8 +141,8 @@ export default function ProjectsPage() {
           {/* No Results */}
           {!loading && filteredProjects.length === 0 && (
             <div className="text-center py-16">
-              <div className="w-24 h-24 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg className="w-12 h-12 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                <svg className="w-12 h-12 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
@@ -196,7 +151,7 @@ export default function ProjectsPage() {
               </p>
               <button
                 onClick={() => setActiveCategory("Tous")}
-                className="text-pink-600 font-semibold hover:underline"
+                className="text-pink-600 font-semibold hover:text-pink-700 transition-colors"
               >
                 Voir tous les projets
               </button>
