@@ -46,7 +46,7 @@ export default function TestimonialsCarousel() {
           </h2>
         </div>
         <Link
-          href="/testimonials"
+          href="/clients"
           className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-neutral-900 text-white rounded-full hover:bg-neutral-800 transition-colors text-sm font-medium"
         >
           Voir tous
@@ -104,7 +104,7 @@ export default function TestimonialsCarousel() {
       {/* Mobile Link */}
       <div className="md:hidden text-center mt-8 mb-8">
         <Link
-          href="/testimonials"
+          href="/clients"
           className="inline-flex items-center gap-2 px-5 py-2.5 bg-neutral-900 text-white rounded-full hover:bg-neutral-800 transition-colors text-sm font-medium"
         >
           Voir tous les témoignages

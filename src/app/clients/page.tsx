@@ -5,79 +5,101 @@ import Link from "next/link";
 import CTASection from "@/components/CTASection";
 import StatsSectionDark from "@/components/StatsSectionDark";
 
-interface Client {
+interface Testimonial {
   id: string;
   name: string;
-  logo: string;
-  invert: boolean;
+  role: string;
+  company: string;
+  content: string;
+  avatar: string | null;
 }
 
 export default function ClientsPage() {
-  const [clients, setClients] = useState<Client[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [testimonialsLoading, setTestimonialsLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/public/clients")
+    fetch("/api/public/testimonials")
       .then(res => res.json())
       .then(data => {
-        setClients(data);
-        setLoading(false);
+        setTestimonials(data);
+        setTestimonialsLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => setTestimonialsLoading(false));
   }, []);
+
   return (
     <div className="min-h-screen bg-[#F7F3F1]">
-      {/* Hero Section */}
-      <section className="pt-12 pb-16 px-6">
-        <div className="max-w-7xl mx-auto">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-zinc-500 mb-8">
-            <Link href="/" className="hover:text-pink-600 transition-colors">
-              Accueil
-            </Link>
-            <span>/</span>
-            <span className="text-zinc-700">Nos Clients</span>
-          </div>
 
-          {/* Header */}
-          <div className="text-center max-w-3xl mx-auto">
+      {/* Testimonials Section */}
+      <section className="py-20 px-6 bg-white">
+        <div className="max-w-7xl mx-auto">
+          {/* Section Header */}
+          <div className="text-center mb-16">
             <span className="text-pink-600 text-sm font-semibold uppercase tracking-wider">
-              Nos Clients
+              Témoignages
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-neutral-900 mt-3 mb-6">
-              Ils nous font confiance
-            </h1>
-            <p className="text-zinc-600 text-lg">
-              Nous sommes fiers de collaborer avec des marques innovantes du monde entier.
+            <h2 className="text-3xl md:text-4xl font-extrabold text-neutral-900 mt-3 mb-4">
+              Ce que disent nos clients
+            </h2>
+            <p className="text-zinc-600 max-w-2xl mx-auto">
+              Découvrez les retours de nos clients sur leur expérience avec Newin Agency.
             </p>
           </div>
-        </div>
-      </section>
 
-      {/* Logos Section - Simple Grid */}
-      <section className="pb-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          {loading ? (
+          {/* Testimonials Grid */}
+          {testimonialsLoading ? (
             <div className="flex justify-center py-16">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-pink-600"></div>
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12 md:gap-16 items-center justify-items-center">
-              {clients.map((client) => (
-                <div key={client.id} className="group cursor-pointer">
-                  <img
-                    src={client.logo}
-                    alt={client.name}
-                    className={`h-10 md:h-12 w-auto opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300 ${
-                      client.invert ? "invert hover:invert-0" : ""
-                    }`}
-                  />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {testimonials.map((testimonial) => (
+                <div
+                  key={testimonial.id}
+                  className="bg-[#F7F3F1] rounded-3xl p-8 border border-zinc-200 hover:border-pink-300 transition-colors"
+                >
+                  {/* Quote Icon */}
+                  <div className="mb-6">
+                    <svg className="w-10 h-10 text-pink-500 opacity-50" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                    </svg>
+                  </div>
+
+                  {/* Content */}
+                  <p className="text-zinc-700 text-lg leading-relaxed mb-8">
+                    &ldquo;{testimonial.content}&rdquo;
+                  </p>
+
+                  {/* Author */}
+                  <div className="flex items-center gap-4 pt-6 border-t border-zinc-200">
+                    {testimonial.avatar ? (
+                      <img
+                        src={testimonial.avatar}
+                        alt={testimonial.name}
+                        className="w-14 h-14 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-14 h-14 rounded-full bg-pink-600 flex items-center justify-center text-white text-xl font-bold">
+                        {testimonial.name[0]}
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-neutral-900 font-bold text-lg">
+                        {testimonial.name}
+                      </p>
+                      <p className="text-zinc-500 text-sm">
+                        {testimonial.role} {testimonial.company && `chez ${testimonial.company}`}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
           )}
         </div>
       </section>
+
 
       {/* Stats Section with Icons and Animation */}
       <StatsSectionDark />
