@@ -237,11 +237,11 @@ export default function ServicesPage() {
           <div className="relative z-10 flex flex-col gap-12 md:gap-16">
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-start items-start gap-4 md:gap-8">
-              <h2 className="text-neutral-900 text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-                Our Services
+              <h2 className="text-neutral-900 text-3xl md:text-4xl lg:text-5xl font-bold leading-tight uppercase">
+                Nos Services
               </h2>
               <p className="text-zinc-600 text-sm leading-relaxed max-w-md">
-                Transform ideas into reality by combining creativity, strategy, and expertise. We build digital products that people love.
+                Découvrez toutes les façons de pimper votre business. Notre expertise s&apos;étend à tous les domaines du graphisme et de la communication, à vous de découvrir le service qu&apos;il vous faut.
               </p>
             </div>
 

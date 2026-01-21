@@ -70,7 +70,7 @@ export default function AgencePageClient() {
           </h1>
           <div className="max-w-3xl mx-auto space-y-4">
             <p className="text-zinc-600 leading-relaxed">
-              Notre expertise s&apos;étend à tous les domaines du <em className="text-pink-600 not-italic font-medium">graphisme</em>, de la conception de <em className="text-pink-600 not-italic font-medium">logos</em> et d&apos;<em className="text-pink-600 not-italic font-medium">identités visuelles</em> percutantes à la réalisation de supports de communication imprimés et numériques, en passant par la création de <em className="text-pink-600 not-italic font-medium">sites web</em> dynamiques et intuitifs.
+              Notre expertise s&apos;étend à tous les domaines du <em className="text-pink-600 not-italic font-medium">graphisme</em>, de la conception de <em className="text-pink-600 not-italic font-medium">logos</em> et d&apos;<em className="text-pink-600 not-italic font-medium">identités visuelles</em> percutantes à la réalisation de supports de communication imprimés et numériques.
             </p>
             <p className="text-zinc-600 leading-relaxed">
               Nous sommes également spécialisés dans la création de <em className="text-pink-600 not-italic font-medium">stratégies digitales</em> percutantes pour propulser votre marque, en intégrant des outils tels que les <em className="text-pink-600 not-italic font-medium">réseaux sociaux</em>, les <em className="text-pink-600 not-italic font-medium">newsletters</em> et les <em className="text-pink-600 not-italic font-medium">campagnes publicitaires</em>.
