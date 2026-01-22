@@ -1,9 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import CTASection from "@/components/CTASection";
 import StatsSectionDark from "@/components/StatsSectionDark";
+
+interface Client {
+  id: string;
+  name: string;
+  logo: string;
+  invert: boolean;
+}
 
 interface Testimonial {
   id: string;
@@ -15,10 +21,20 @@ interface Testimonial {
 }
 
 export default function ClientsPage() {
+  const [clients, setClients] = useState<Client[]>([]);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [clientsLoading, setClientsLoading] = useState(true);
   const [testimonialsLoading, setTestimonialsLoading] = useState(true);
 
   useEffect(() => {
+    fetch("/api/public/clients")
+      .then(res => res.json())
+      .then(data => {
+        setClients(data);
+        setClientsLoading(false);
+      })
+      .catch(() => setClientsLoading(false));
+
     fetch("/api/public/testimonials")
       .then(res => res.json())
       .then(data => {
@@ -28,8 +44,58 @@ export default function ClientsPage() {
       .catch(() => setTestimonialsLoading(false));
   }, []);
 
+  // Duplicate clients for seamless loop
+  const duplicatedClients = [...clients, ...clients];
+
   return (
     <div className="min-h-screen bg-[#F7F3F1]">
+      {/* Hero Section */}
+      <section className="pt-32 pb-16 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <span className="text-pink-600 text-sm font-semibold uppercase tracking-wider">
+            Nos Clients
+          </span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-neutral-900 mt-3 mb-6">
+            Ils nous font confiance
+          </h1>
+          <p className="text-zinc-600 text-lg max-w-2xl mx-auto">
+            Nous sommes fiers de collaborer avec des marques innovantes qui partagent notre vision de l&apos;excellence.
+          </p>
+        </div>
+      </section>
+
+      {/* Logos Carousel Section */}
+      <section className="py-12 overflow-hidden">
+        {clientsLoading ? (
+          <div className="flex justify-center py-16">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-pink-600"></div>
+          </div>
+        ) : clients.length > 0 ? (
+          <div className="relative">
+            {/* Gradient overlays for fade effect */}
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#F7F3F1] to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#F7F3F1] to-transparent z-10 pointer-events-none" />
+
+            {/* Scrolling logos */}
+            <div className="flex animate-scroll-left hover:pause">
+              {duplicatedClients.map((client, index) => (
+                <div
+                  key={`${client.id}-${index}`}
+                  className="flex-shrink-0 mx-8 md:mx-12 flex items-center justify-center"
+                >
+                  <img
+                    src={client.logo}
+                    alt={client.name}
+                    className={`h-10 md:h-14 w-auto opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300 ${
+                      client.invert ? "invert" : ""
+                    }`}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
+      </section>
 
       {/* Testimonials Section */}
       <section className="py-20 px-6 bg-white">
@@ -99,7 +165,6 @@ export default function ClientsPage() {
           )}
         </div>
       </section>
-
 
       {/* Stats Section with Icons and Animation */}
       <StatsSectionDark />
