@@ -15,9 +15,12 @@ export async function GET(
       return NextResponse.json({ error: "Service not found" }, { status: 404 });
     }
 
+    let features = [];
+    try { features = JSON.parse(service.features); } catch { /* malformed JSON */ }
+
     return NextResponse.json({
       ...service,
-      features: JSON.parse(service.features),
+      features,
     });
   } catch (error) {
     console.error("Error fetching service:", error);
@@ -39,17 +42,42 @@ export async function PUT(
     const { id } = await params;
     const data = await request.json();
 
-    const service = await prisma.service.update({
-      where: { id },
-      data: {
-        ...data,
-        features: data.features ? JSON.stringify(data.features) : undefined,
-      },
+    // Get the current service to check if slug is changing
+    const currentService = await prisma.service.findUnique({ where: { id } });
+    if (!currentService) {
+      return NextResponse.json({ error: "Service not found" }, { status: 404 });
+    }
+
+    const newSlug = data.slug;
+    const slugChanged = newSlug && newSlug !== currentService.slug;
+
+    // Update the service and cascade slug change to projects in a transaction
+    const service = await prisma.$transaction(async (tx) => {
+      const updated = await tx.service.update({
+        where: { id },
+        data: {
+          ...data,
+          features: data.features ? JSON.stringify(data.features) : undefined,
+        },
+      });
+
+      // If slug changed, update all projects that reference the old slug
+      if (slugChanged) {
+        await tx.project.updateMany({
+          where: { serviceSlug: currentService.slug },
+          data: { serviceSlug: newSlug },
+        });
+      }
+
+      return updated;
     });
+
+    let features = [];
+    try { features = JSON.parse(service.features); } catch { /* malformed JSON */ }
 
     return NextResponse.json({
       ...service,
-      features: JSON.parse(service.features),
+      features,
     });
   } catch (error) {
     console.error("Error updating service:", error);

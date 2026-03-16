@@ -97,6 +97,11 @@ export default function ProjectsPage() {
     ? otherProjects
     : projects.filter(p => p.category === filterCategory);
 
+  // Clear selection when filter changes to avoid cross-category bulk actions
+  useEffect(() => {
+    setSelectedIds(new Set());
+  }, [filterCategory]);
+
   const fetchProjects = async () => {
     try {
       const res = await fetch("/api/admin/projects");
@@ -197,10 +202,10 @@ export default function ProjectsPage() {
   };
 
   const toggleSelectAll = () => {
-    if (selectedIds.size === projects.length) {
+    if (selectedIds.size === filteredProjects.length) {
       setSelectedIds(new Set());
     } else {
-      setSelectedIds(new Set(projects.map(p => p.id)));
+      setSelectedIds(new Set(filteredProjects.map(p => p.id)));
     }
   };
 

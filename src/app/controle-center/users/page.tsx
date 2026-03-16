@@ -72,7 +72,7 @@ export default function UsersPage() {
         password: "",
         name: user.name || "",
         role: user.role,
-        permissions: JSON.parse(user.permissions || "[]"),
+        permissions: (() => { try { return JSON.parse(user.permissions || "[]"); } catch { return []; } })(),
         isActive: user.isActive,
       });
     } else {
@@ -241,7 +241,7 @@ export default function UsersPage() {
             </thead>
             <tbody className="divide-y divide-zinc-700">
               {users.map((user) => {
-                const permissions = JSON.parse(user.permissions || "[]");
+                const permissions = (() => { try { return JSON.parse(user.permissions || "[]"); } catch { return []; } })();
                 return (
                   <tr key={user.id} className="hover:bg-zinc-700/50">
                     <td className="px-6 py-4">

@@ -9,10 +9,11 @@ export async function GET() {
       orderBy: { order: "asc" },
     });
 
-    return NextResponse.json(services.map(s => ({
-      ...s,
-      features: JSON.parse(s.features),
-    })));
+    return NextResponse.json(services.map(s => {
+      let features = [];
+      try { features = JSON.parse(s.features); } catch { /* malformed JSON */ }
+      return { ...s, features };
+    }));
   } catch (error) {
     console.error("Error fetching services:", error);
     return NextResponse.json({ error: "Failed to fetch services" }, { status: 500 });
@@ -35,9 +36,12 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    let features = [];
+    try { features = JSON.parse(service.features); } catch { /* malformed JSON */ }
+
     return NextResponse.json({
       ...service,
-      features: JSON.parse(service.features),
+      features,
     });
   } catch (error) {
     console.error("Error creating service:", error);

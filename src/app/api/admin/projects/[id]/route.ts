@@ -8,6 +8,11 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
     const project = await prisma.project.findUnique({ where: { id } });
 
@@ -15,9 +20,12 @@ export async function GET(
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
+    let tags: string[] = [];
+    try { tags = JSON.parse(project.tags || "[]"); } catch { /* malformed JSON */ }
+
     return NextResponse.json({
       ...project,
-      tags: JSON.parse(project.tags),
+      tags,
     });
   } catch (error) {
     console.error("Error fetching project:", error);
@@ -47,9 +55,12 @@ export async function PUT(
       },
     });
 
+    let tags: string[] = [];
+    try { tags = JSON.parse(project.tags || "[]"); } catch { /* malformed JSON */ }
+
     return NextResponse.json({
       ...project,
-      tags: JSON.parse(project.tags),
+      tags,
     });
   } catch (error) {
     console.error("Error updating project:", error);

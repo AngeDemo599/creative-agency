@@ -16,11 +16,12 @@ export async function GET(request: NextRequest) {
       orderBy: { order: 'asc' }
     });
 
-    // Parse tags JSON
-    const projectsWithTags = projects.map(p => ({
-      ...p,
-      tags: typeof p.tags === 'string' ? JSON.parse(p.tags) : p.tags
-    }));
+    // Parse tags JSON safely
+    const projectsWithTags = projects.map(p => {
+      let tags: string[] = [];
+      try { tags = typeof p.tags === 'string' ? JSON.parse(p.tags) : (p.tags || []); } catch { /* malformed JSON */ }
+      return { ...p, tags };
+    });
 
     return NextResponse.json(projectsWithTags, {
       headers: {

@@ -21,12 +21,19 @@ export default function DashboardPage() {
 
   const fetchStats = async () => {
     try {
+      const safeJson = async (url: string) => {
+        const r = await fetch(url);
+        if (!r.ok) return [];
+        const data = await r.json();
+        return Array.isArray(data) ? data : [];
+      };
+
       const [services, projects, testimonials, faqs, clients] = await Promise.all([
-        fetch("/api/admin/services").then(r => r.json()),
-        fetch("/api/admin/projects").then(r => r.json()),
-        fetch("/api/admin/testimonials").then(r => r.json()),
-        fetch("/api/admin/faqs").then(r => r.json()),
-        fetch("/api/admin/clients").then(r => r.json()),
+        safeJson("/api/admin/services"),
+        safeJson("/api/admin/projects"),
+        safeJson("/api/admin/testimonials"),
+        safeJson("/api/admin/faqs"),
+        safeJson("/api/admin/clients"),
       ]);
 
       setStats({

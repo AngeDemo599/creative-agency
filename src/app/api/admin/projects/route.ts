@@ -25,11 +25,17 @@ function generateProjectId(title: string): string {
 // GET all projects
 export async function GET(request: NextRequest) {
   try {
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
     const serviceSlug = searchParams.get("serviceSlug");
 
-    const where: Record<string, unknown> = { isActive: true };
+    // Admin route: show ALL projects (including inactive)
+    const where: Record<string, unknown> = {};
     if (category && category !== "Tous") where.category = category;
     if (serviceSlug) where.serviceSlug = serviceSlug;
 
@@ -38,10 +44,11 @@ export async function GET(request: NextRequest) {
       orderBy: { order: "asc" },
     });
 
-    return NextResponse.json(projects.map(p => ({
-      ...p,
-      tags: JSON.parse(p.tags),
-    })));
+    return NextResponse.json(projects.map(p => {
+      let tags: string[] = [];
+      try { tags = JSON.parse(p.tags || "[]"); } catch { /* malformed JSON */ }
+      return { ...p, tags };
+    }));
   } catch (error) {
     console.error("Error fetching projects:", error);
     return NextResponse.json({ error: "Failed to fetch projects" }, { status: 500 });
@@ -80,10 +87,11 @@ export async function POST(request: NextRequest) {
         )
       );
       return NextResponse.json(
-        projects.map((p) => ({
-          ...p,
-          tags: JSON.parse(p.tags),
-        }))
+        projects.map((p) => {
+          let tags: string[] = [];
+          try { tags = JSON.parse(p.tags || "[]"); } catch { /* malformed JSON */ }
+          return { ...p, tags };
+        })
       );
     }
 
@@ -98,9 +106,12 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    let tags: string[] = [];
+    try { tags = JSON.parse(project.tags || "[]"); } catch { /* malformed JSON */ }
+
     return NextResponse.json({
       ...project,
-      tags: JSON.parse(project.tags),
+      tags,
     });
   } catch (error) {
     console.error("Error creating project:", error);

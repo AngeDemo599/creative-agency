@@ -19,6 +19,11 @@ function generateClientId(name: string): string {
 
 export async function GET() {
   try {
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const clients = await prisma.client.findMany({
       orderBy: { order: "asc" },
     });

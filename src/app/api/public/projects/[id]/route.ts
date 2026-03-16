@@ -24,7 +24,7 @@ export async function GET(
     // Parse tags from JSON string
     const parsedProject = {
       ...project,
-      tags: JSON.parse(project.tags || "[]"),
+      tags: (() => { try { return JSON.parse(project.tags || "[]"); } catch { return []; } })(),
     };
 
     return NextResponse.json(parsedProject);

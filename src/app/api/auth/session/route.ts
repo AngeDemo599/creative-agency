@@ -32,7 +32,7 @@ export async function GET() {
         email: user.email,
         name: user.name,
         role: user.role,
-        permissions: JSON.parse(user.permissions || "[]"),
+        permissions: (() => { try { return JSON.parse(user.permissions || "[]"); } catch { return []; } })(),
       }
     });
   } catch (error) {

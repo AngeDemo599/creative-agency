@@ -61,11 +61,11 @@ export default function ContactPageClient() {
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/public/settings").then(res => res.json()),
-      fetch("/api/public/services").then(res => res.json())
+      fetch("/api/public/settings").then(res => res.ok ? res.json() : {}),
+      fetch("/api/public/services").then(res => res.ok ? res.json() : [])
     ]).then(([settingsData, servicesData]) => {
-      setSettings(settingsData);
-      setServices(servicesData);
+      setSettings(settingsData || {});
+      setServices(Array.isArray(servicesData) ? servicesData : []);
       setLoading(false);
     }).catch(() => setLoading(false));
   }, []);
@@ -130,10 +130,9 @@ export default function ContactPageClient() {
 
   const handleDateChange = (date: string) => {
     setMeetingForm({ ...meetingForm, date, time: "" });
+    setAvailableSlots(null);
     if (date) {
       fetchAvailableSlots(date);
-    } else {
-      setAvailableSlots(null);
     }
   };
 
@@ -205,9 +204,9 @@ export default function ContactPageClient() {
           email: formData.email,
           phone: formData.phone || null,
           company: formData.company || null,
-          subject: formData.service,
+          subject: formData.service || "General Inquiry",
           message: formData.message,
-          service: formData.service,
+          service: formData.service || null,
         }),
       });
 
