@@ -3,6 +3,8 @@ import prisma from "@/lib/db";
 import { BreadcrumbJsonLd } from "@/components/JsonLd";
 import ProjectDetailClient from "./ProjectDetailClient";
 
+export const dynamic = "force-dynamic";
+
 interface Props {
   params: Promise<{ id: string }>;
 }
