@@ -66,14 +66,14 @@ export default function AgencePageClient() {
       <section className="pt-32 pb-20 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 leading-tight mb-8">
-            Notre équipe <em className="font-normal text-zinc-500">de</em> talentueux graphistes <em className="font-normal text-zinc-500">&</em> experts <em className="font-normal text-zinc-500">en</em> communication digitale partage <em className="font-normal text-zinc-500">une</em> passion commune <em className="font-normal text-zinc-500">pour</em> l&apos;esthétique <em className="font-normal text-zinc-500">&</em> l&apos;innovation.
+            Agence de communication <em className="font-normal text-zinc-500">&</em> marketing digital
           </h1>
           <div className="max-w-3xl mx-auto space-y-4">
-            <p className="text-zinc-600 leading-relaxed">
-              Notre expertise s&apos;étend à tous les domaines du <em className="text-pink-600 not-italic font-medium">graphisme</em>, de la conception de <em className="text-pink-600 not-italic font-medium">logos</em> et d&apos;<em className="text-pink-600 not-italic font-medium">identités visuelles</em> percutantes à la réalisation de supports de communication imprimés et numériques.
+            <p className="text-zinc-600 leading-relaxed text-lg">
+              Vous souhaitez construire une marque forte, développer votre visibilité et capter l&apos;attention de votre audience à travers des contenus impactants et des stratégies efficaces ?
             </p>
-            <p className="text-zinc-600 leading-relaxed">
-              Nous sommes également spécialisés dans la création de <em className="text-pink-600 not-italic font-medium">stratégies digitales</em> percutantes pour propulser votre marque, en intégrant des outils tels que les <em className="text-pink-600 not-italic font-medium">réseaux sociaux</em>, les <em className="text-pink-600 not-italic font-medium">newsletters</em> et les <em className="text-pink-600 not-italic font-medium">campagnes publicitaires</em>.
+            <p className="text-2xl md:text-3xl font-bold text-pink-600 uppercase">
+              VOUS ETES AU BON ENDROIT !
             </p>
           </div>
         </div>
@@ -104,28 +104,46 @@ export default function AgencePageClient() {
                 <li className="border-b border-zinc-200 pb-8">
                   <p className="text-lg font-semibold text-neutral-900 mb-3">
                     <span className="text-pink-600 mr-2">01.</span>
-                    <em className="not-italic">Nous sommes toujours à votre écoute.</em>
+                    <em className="not-italic">À l&apos;écoute de votre vision</em>
                   </p>
                   <p className="text-zinc-600 leading-relaxed">
-                    Ce qui compte pour nous? Que votre projet reflète votre image. Nous mettons notre expertise à votre service pour rendre vos projets exceptionnels !
+                    Chaque projet commence par une compréhension profonde de votre marque, de vos objectifs et de vos ambitions. L&apos;essentiel est de créer une communication fidèle à votre identité.
                   </p>
                 </li>
                 <li className="border-b border-zinc-200 pb-8">
                   <p className="text-lg font-semibold text-neutral-900 mb-3">
                     <span className="text-pink-600 mr-2">02.</span>
-                    <em className="not-italic">Chez Newin la qualité est une priorité.</em>
+                    <em className="not-italic">L&apos;exigence de qualité</em>
                   </p>
                   <p className="text-zinc-600 leading-relaxed">
-                    Tout est mis en oeuvre pour rendre votre business qualitatif dès le premier coup d&apos;oeil.
+                    Chaque détail compte. De la stratégie à la création, tout est pensé pour offrir un rendu professionnel, cohérent et impactant dès le premier regard.
+                  </p>
+                </li>
+                <li className="border-b border-zinc-200 pb-8">
+                  <p className="text-lg font-semibold text-neutral-900 mb-3">
+                    <span className="text-pink-600 mr-2">03.</span>
+                    <em className="not-italic">Une approche sur mesure</em>
+                  </p>
+                  <p className="text-zinc-600 leading-relaxed">
+                    Chaque marque est unique. Les solutions proposées sont adaptées à vos besoins, votre marché et votre positionnement pour garantir des résultats pertinents.
+                  </p>
+                </li>
+                <li className="border-b border-zinc-200 pb-8">
+                  <p className="text-lg font-semibold text-neutral-900 mb-3">
+                    <span className="text-pink-600 mr-2">04.</span>
+                    <em className="not-italic">Créativité au service de la performance</em>
+                  </p>
+                  <p className="text-zinc-600 leading-relaxed">
+                    L&apos;esthétique attire, la stratégie convertit. Chaque création allie design et réflexion pour maximiser l&apos;impact et atteindre vos objectifs.
                   </p>
                 </li>
                 <li>
                   <p className="text-lg font-semibold text-neutral-900 mb-3">
-                    <span className="text-pink-600 mr-2">03.</span>
-                    <em className="not-italic">Petite ou grande entreprise, Newin s&apos;occupe de vous.</em>
+                    <span className="text-pink-600 mr-2">05.</span>
+                    <em className="not-italic">Un partenaire de croissance</em>
                   </p>
                   <p className="text-zinc-600 leading-relaxed">
-                    Nous soutenons les business qui souhaitent grandir et se démarquer. Mais nous accompagnons également les grandes entreprises qui souhaitent innover.
+                    De la jeune entreprise aux structures établies, chaque collaboration s&apos;inscrit dans une logique d&apos;évolution, d&apos;innovation et de développement durable.
                   </p>
                 </li>
               </ol>

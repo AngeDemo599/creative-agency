@@ -17,16 +17,16 @@ export default function CTASection() {
           <div className="flex-1 flex flex-col justify-start items-start gap-4">
             {/* Label */}
             <span className="cta-label text-pink-400 text-sm font-semibold uppercase leading-5 tracking-wider transition-colors duration-500">
-              Start your journey
+              Commencez l&apos;aventure maintenant !
             </span>
 
             {/* Heading */}
             <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold uppercase leading-tight">
-              <span className="cta-title text-zinc-800 transition-colors duration-500">To Create</span>
+              <span className="cta-title text-zinc-800 transition-colors duration-500">ET CREEZ UNE</span>
               <br />
-              <span className="cta-title text-zinc-800 transition-colors duration-500">Narrative</span>
+              <span className="cta-title text-zinc-800 transition-colors duration-500">MARQUE FORTE</span>
               <br />
-              <span className="cta-brand text-pink-800 transition-colors duration-500">Brand!</span>
+              <span className="cta-brand text-pink-800 transition-colors duration-500">QUI MARQUE LES ESPRITS.</span>
             </h2>
 
             {/* Tags */}
